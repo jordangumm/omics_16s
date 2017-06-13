@@ -9,5 +9,14 @@ Base workflow for setting up OTU analysis from Illumina fastq(s)
 2. Activate the root environment
 > $source <path_to_project>/dependencies/miniconda/bin/activate
 
-3. Run scripts at will!
+3. Run and build on scripts at will!
 > $python preanalysis.py <run_dp>
+
+4. Install new dependencies
+> $conda install bwa
+
+5. Save environment dependencies for later automated build
+> $conda env export > environment.yml
+
+6. Recreate saved environment
+> $conda env create -f environment.yml
