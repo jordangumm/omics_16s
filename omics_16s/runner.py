@@ -12,8 +12,7 @@ class PreAnalyzer(WorkflowRunner):
 
     def workflow(self):
         """ method invoked on class instance run call """
-        self.addTask("flowcellqc",
-                     command=['echo', '"test flowcellqc output"'])
+        self.addTask("preanalysis", command=['python', 'preanalysis.py', self.run_dp])
 
 
 @click.command()
@@ -27,8 +26,7 @@ def pre_analysis(run_dp):
     Arguments:
     run_dp -- String path to run directory to pre-analyze
     """
-    randstr = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(8))
-    log_output_dp = os.path.join(run_dp, "preanalysis{}".format(randstr))
+    log_output_dp = os.path.join(run_dp, 'bioinfo', 'runner')
 
     preanalyzer = PreAnalyzer(run_dp=run_dp)
     preanalyzer.run(mode='local', dataDirRoot=log_output_dp)

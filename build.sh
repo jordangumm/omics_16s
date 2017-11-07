@@ -31,13 +31,14 @@ pip install pyflow-1.1.17.tar.gz
 rm pyflow-1.1.17.tar.gz
 
 # install MeFiT and dependencies
-wget http://best.snu.ac.kr/casper/program/casper_B_v0.8.2.tar.gz
-tar -zxvf casper_B_v0.8.2.tar.gz
-rm casper_B_v0.8.2.tar.gz
-mv casper dependencies/miniconda/bin/
+conda install numpy click jellyfish HTSeq
 
-conda install numpy jellyfish
-pip install -y HTSeq
+wget http://best.snu.ac.kr/casper/program/casper_v0.8.2.tar.gz
+tar -zxvf casper_v0.8.2.tar.gz
+rm casper_v0.8.2.tar.gz
+cd casper_v0.8.2 && make
+mv casper ../dependencies/miniconda/bin/
+cd .. && rm -r casper_v0.8.2
 
 wget https://raw.githubusercontent.com/nisheth/MeFiT/master/mefit
 chmod 772 mefit

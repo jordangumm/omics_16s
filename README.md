@@ -9,12 +9,13 @@ It leverages third party tools:
     * [Mothur 2009](http://aem.asm.org/content/75/23/7537.full): software for describing and comparing microbial communities
 
 ## Setup
+1. To be able to build [CASPER](http://best.snu.ac.kr/casper/index.php?name=manual), you'll need to make sure the g++ compiler and boost libraries are installed
 
-1. Build the local conda environment with dependencies
+2. Build the local conda environment with dependencies
 > $./build
 
-2. Activate the root environment
+3. Activate the root environment
 > $source <path_to_project>/dependencies/miniconda/bin/activate
 
-3. Run and build on scripts at will!
+4. Run and build on scripts at will!
 > $python runner.py <run_dp>
