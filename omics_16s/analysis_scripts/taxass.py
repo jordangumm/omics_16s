@@ -10,7 +10,7 @@ import click
 from pyflow import WorkflowRunner
 from subprocess import call
 
-class Analyzer(WorkflowRunner):
+class TaxAss(WorkflowRunner):
     def __init__(self, analysis_dp, num_cpu=1):
         self.analysis_dp = analysis_dp
         self.read_dp = os.path.join(analysis_dp, 'reads')
