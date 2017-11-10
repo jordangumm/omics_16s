@@ -43,3 +43,15 @@ cd .. && rm -r casper_v0.8.2
 wget https://raw.githubusercontent.com/nisheth/MeFiT/master/mefit
 chmod 772 mefit
 mv mefit dependencies/miniconda/bin/
+
+git clone https://github.com/McMahonLab/TaxAss.git
+unzip TaxAss/FreshTrain-files/FreshTrain18Aug2016.zip
+mv FreshTrain18Aug2016 dependencies/
+mv TaxAss dependencies/
+
+wget https://mothur.org/w/images/b/b4/Silva.nr_v128.tgz
+tar -zxvf Silva.nr_v128.tgz -C dependencies/
+
+wget https://mothur.org/w/images/a/a4/Silva.seed_v128.tgz
+tar -zxvf Silva.seed_v128.tgz -C dependencies/
+rm -r Silva*
