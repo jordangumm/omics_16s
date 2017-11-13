@@ -38,8 +38,11 @@ def pre_analysis(run_dp, flux, account, ppn, mem, walltime):
     log_output_dp = os.path.join(run_dp, 'bioinfo', 'runner')
 
     if flux:
-        call('echo "python runner.py {}" | qsub -N omics_16s -A {} -q fluxm -l nodes=1:ppn={},mem={},walltime={}'.format(
-                                                                              run_dp, account, ppn, mem, walltime), shell=True)
+        full_dp = os.path.dirname(os.path.abspath(__file__))
+        activate = 'source {}'.format(os.path.join(full_dp, 'dependencies', 'miniconda', 'bin', 'activate'))
+        runner_fp = os.path.join(full_dp, 'runner.py')
+        qsub = 'qsub -N omics_16s -A {} -q fluxm -l nodes=1:ppn={},mem={},walltime={}'.format(account, ppn, mem, walltime)
+        call('echo "{} && python {} {}" | {}'.format(activate, runner_fp, run_dp, qsub), shell=True)
     else:
         runner = Runner(run_dp=run_dp)
         runner.run(mode='local', dataDirRoot=log_output_dp)
