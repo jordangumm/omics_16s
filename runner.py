@@ -5,6 +5,7 @@ import string
 
 import click
 from pyflow import WorkflowRunner
+from subprocess import call
 
 class Runner(WorkflowRunner):
     def __init__(self, run_dp):
