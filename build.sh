@@ -46,12 +46,13 @@ mv mefit dependencies/miniconda/bin/
 
 git clone https://github.com/McMahonLab/TaxAss.git
 unzip TaxAss/FreshTrain-files/FreshTrain18Aug2016.zip
-mv FreshTrain18Aug2016 dependencies/
 mv TaxAss dependencies/
+mv FreshTrain18Aug2016 dependencies/TaxAss/
 
+mkdir -p dependencies/silva
 wget https://mothur.org/w/images/b/b4/Silva.nr_v128.tgz
-tar -zxvf Silva.nr_v128.tgz -C dependencies/
+tar -zxvf Silva.nr_v128.tgz -C dependencies/silva/
 
 wget https://mothur.org/w/images/a/a4/Silva.seed_v128.tgz
-tar -zxvf Silva.seed_v128.tgz -C dependencies/
+tar -zxvf Silva.seed_v128.tgz -C dependencies/silva/
 rm -r Silva*
