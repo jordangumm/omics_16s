@@ -44,8 +44,8 @@ def runner(run_dp, flux, account, ppn, mem, walltime):
         qsub = 'qsub -N omics_16s -A {} -q fluxm -l nodes=1:ppn={},mem={},walltime={}'.format(account, ppn, mem, walltime)
         call('echo "{} && python {} {}" | {}'.format(activate, runner_fp, run_dp, qsub), shell=True)
     else:
-        runner = Runner(run_dp=run_dp)
-        runner.run(mode='local', dataDirRoot=log_output_dp)
+        workflow_runner = Runner(run_dp=run_dp)
+        workflow_runner.run(mode='local', dataDirRoot=log_output_dp)
 
 
 if __name__ == "__main__":
