@@ -27,8 +27,8 @@ class Runner(WorkflowRunner):
 @click.option('--ppn', '-p', default=8)
 @click.option('--mem', '-m', default='20gb')
 @click.option('--walltime', '-w', default='2:00:00')
-def pre_analysis(run_dp, flux, account, ppn, mem, walltime):
-    """ Pre-Analysis Management
+def runner(run_dp, flux, account, ppn, mem, walltime):
+    """ Analysis Workflow Management
 
     Sets up Pyflow WorkflowRunner and launches locally by default or via flux
 
@@ -49,4 +49,4 @@ def pre_analysis(run_dp, flux, account, ppn, mem, walltime):
 
 
 if __name__ == "__main__":
-    pre_analysis()
+    runner()
