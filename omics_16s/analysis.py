@@ -14,8 +14,9 @@ class Analyzer(WorkflowRunner):
     def __init__(self, analysis_dp, num_cpu):
         self.analysis_dp = analysis_dp
         self.read_dp = os.path.join(analysis_dp, 'reads')
-        if not os.path.exists(self.read_dp):
-            sys.exit('[ERROR]: No analysis reads, preanalysis must have failed!')
+        self.mothur_fasta_fp = os.path.join(self.read_dp, 'stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta')
+        if not os.path.exists(self.read_dp) or not os.path.exists(self.mothur_fasta_fp):
+            sys.exit('[ERROR]: No or missing analysis reads, preanalysis must have failed!')
 
         self.mothur_dp = os.path.join(analysis_dp, 'mothur')
         self.num_cpu=num_cpu
@@ -31,6 +32,9 @@ class Analyzer(WorkflowRunner):
         """ method invoked on class instance run call """
         self.addTask("otu_generator", command=['python', self.otu_generator_fp, '--num_cpu', num_cpu,
                                                                   self.read_dp, self.dependencies_dp])
+        self.addTask("taxass_analysis", command=['python', self.taxass_fp, '--num_cpu', num_cpu,
+                                   self.mothur_fasta_fp, os.path.join(self.dependencies_dp, 'silva')],
+                                        dependencies=['otu_generator',])
 
 
 @click.command()
