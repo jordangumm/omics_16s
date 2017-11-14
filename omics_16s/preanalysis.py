@@ -8,10 +8,10 @@ from pyflow import WorkflowRunner
 from subprocess import call
 
 class PreAnalyzer(WorkflowRunner):
-    def __init__(self, run_dp):
+    def __init__(self, run_dp, analysis_dp):
         self.run_dp = run_dp
         self.samples = self.get_sample_dict()
-        self.read_output_dp = os.path.join(self.run_dp, 'bioinfo', 'analysis', 'reads')
+        self.read_output_dp = os.path.join(analysis_dp, 'reads')
         if not os.path.exists(self.read_output_dp):
             os.makedirs(self.read_output_dp)
 
@@ -56,7 +56,8 @@ class PreAnalyzer(WorkflowRunner):
         
 @click.command()
 @click.argument('run_dp')
-def pre_analysis(run_dp):
+@click.argument('analysis_dp')
+def pre_analysis(run_dp, analysis_dp):
     """ Pre-Analysis Management
 
     Sets up Pyflow WorkflowRunner with randomized log output string to avoid 
@@ -67,7 +68,7 @@ def pre_analysis(run_dp):
     """
     #log_output_dp = os.path.join(run_dp, 'bioinfo', "preanalysis")
 
-    preanalyzer = PreAnalyzer(run_dp=run_dp)
+    preanalyzer = PreAnalyzer(run_dp=run_dp, analysis_dp=analysis_dp)
     #preanalyzer.run(mode='local', dataDirRoot=log_output_dp)
     #print 'post preanalyser'
 

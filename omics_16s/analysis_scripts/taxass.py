@@ -11,11 +11,16 @@ from pyflow import WorkflowRunner
 from subprocess import call
 
 class TaxAss(WorkflowRunner):
-    def __init__(self, analysis_dp, num_cpu=1):
-        self.analysis_dp = analysis_dp
-        self.read_dp = os.path.join(analysis_dp, 'reads')
-        if not os.path.exists(self.read_dp):
-            sys.exit('[ERROR]: No analysis reads, preanalysis must have failed!')
+    def __init__(self, fasta_fp, taxass_dp, silva_dp, num_cpu):
+        self.fasta_fp = fasta_fp
+
+        self.specific_fasta = os.path.join(taxass_dp, 'FreshTrain18Aug2016.fasta')
+        self.specific_taxa = os.path.join(taxass_dp, 'FreshTrain18Aug2016.taxonomy')
+        if not os.path.exists(self.fasta_ref) or not os.path.exists(self.taxonomy_ref):
+            sys.exit('[ERROR]: Taxass file not found in {}'.format(taxass_dp))
+
+        self.general_fasta = os.path.join(silva_dp, 'silva.nr_
+        self.general_taxa =
         self.num_cpu=num_cpu
 
 
@@ -25,19 +30,18 @@ class TaxAss(WorkflowRunner):
 
 
 @click.command()
-@click.argument('analysis_dp')
-def analysis(analysis_dp):
-    """ Pre-Analysis Management
-
-    Sets up Pyflow WorkflowRunner with randomized log output string to avoid 
-    possible output collision if ran multiple times.
-
-    Arguments:
-    run_dp -- String path to run directory to pre-analyze
-    """
+@click.argument('read_dp')
+@click.argument('taxass_dp')
+@click.argument('silva_dp')
+@click.option('-num_cpu', type=click.INT, default=2)
+def analysis(read_dp, taxass_dp, silva_dp):
+    """ TaxAss Analysis Management """
     log_output_dp = os.path.join(analysis_dp, 'logs')
 
-    preanalyzer = Analyzer(analysis_dp=analysis_dp)
+    preanalyzer = Analyzer(read_dp=read_dp,
+                           taxass_dp=taxass_dp,
+                           silva_dp=silva_dp,
+                           num_cpu=num_cpu)
     preanalyzer.run(mode='local', dataDirRoot=log_output_dp)
 
 

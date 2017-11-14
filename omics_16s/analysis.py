@@ -11,33 +11,36 @@ from pyflow import WorkflowRunner
 from subprocess import call
 
 class Analyzer(WorkflowRunner):
-    def __init__(self, analysis_dp, num_cpu=1):
+    def __init__(self, analysis_dp, num_cpu):
         self.analysis_dp = analysis_dp
         self.read_dp = os.path.join(analysis_dp, 'reads')
         if not os.path.exists(self.read_dp):
             sys.exit('[ERROR]: No analysis reads, preanalysis must have failed!')
+
+        self.mothur_dp = os.path.join(analysis_dp, 'mothur')
         self.num_cpu=num_cpu
+
+        full_dp = os.path.dirname(os.path.abspath(__file__))
+        self.otu_generator_fp = os.path.join(full_dp, 'analysis_scripts', 'otu_generator.py')
+        self.taxass_fp = os.path.join(full_dp, 'analysis_scripts', 'taxass.py')
+
+        self.dependencies_dp = full_dp.replace('omics_16s/omics_16s', 'omics_16s/dependencies')
 
 
     def workflow(self):
         """ method invoked on class instance run call """
-        pass
+        self.addTask("otu_generator", command=['python', self.otu_generator_fp, '--num_cpu', num_cpu,
+                                                                  self.read_dp, self.dependencies_dp])
 
 
 @click.command()
 @click.argument('analysis_dp')
-def analysis(analysis_dp):
-    """ Pre-Analysis Management
-
-    Sets up Pyflow WorkflowRunner with randomized log output string to avoid 
-    possible output collision if ran multiple times.
-
-    Arguments:
-    run_dp -- String path to run directory to pre-analyze
-    """
+@click.option('--num_cpu', '-n', default=2)
+def analysis(analysis_dp, num_cpu):
+    """ Analysis Management """
     log_output_dp = os.path.join(analysis_dp, 'logs')
 
-    preanalyzer = Analyzer(analysis_dp=analysis_dp)
+    preanalyzer = Analyzer(analysis_dp=analysis_dp, num_cpu=num_cpu)
     preanalyzer.run(mode='local', dataDirRoot=log_output_dp)
 
 

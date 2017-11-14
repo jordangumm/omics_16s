@@ -8,16 +8,21 @@ from pyflow import WorkflowRunner
 from subprocess import call
 
 class Runner(WorkflowRunner):
-    def __init__(self, run_dp):
+    def __init__(self, run_dp, num_cpu):
+        full_dp = os.path.dirname(os.path.abspath(__file__))
+        self.preanalysis_fp = os.path.join(full_dp, 'omics_16s', 'preanalysis.py')
+        self.analysis_fp = os.path.join(full_dp, 'omics_16s', 'analysis.py')
+ 
+        self.silva_dp = os.path.join(full_dp, 'dependencies', 'silva')
+        self.taxass_dp = os.path.join(full_dp, 'dependencies', 'TaxAss')
+
         self.run_dp = run_dp
+        self.analysis_dp = os.path.join(run_dp, 'bioinfo', 'analysis')
 
     def workflow(self):
         """ method invoked on class instance run call """
-        full_dp = os.path.dirname(os.path.abspath(__file__))
-        self.addTask("preanalysis", command=['python', os.path.join(full_dp, 'omics_16s/preanalysis.py'), self.run_dp])
-        self.addTask("analysis", command=['python', os.path.join(full_dp, 'omics_16s/analysis.py'),
-                                                    os.path.join(self.run_dp, 'bioinfo', 'analysis')],
-                                 dependencies=['preanalysis',])
+        self.addTask("preanalysis", command=['python', self.preanalysis_fp, self.run_dp, self.analysis_dp])
+        self.addTask("analysis", command=['python', self.analysis_fp, self.analysis_dp], dependencies=['preanalysis',])
 
 
 @click.command()
@@ -44,7 +49,7 @@ def runner(run_dp, flux, account, ppn, mem, walltime):
         qsub = 'qsub -N omics_16s -A {} -q fluxm -l nodes=1:ppn={},mem={},walltime={}'.format(account, ppn, mem, walltime)
         call('echo "{} && python {} {}" | {}'.format(activate, runner_fp, run_dp, qsub), shell=True)
     else:
-        workflow_runner = Runner(run_dp=run_dp)
+        workflow_runner = Runner(run_dp=run_dp, num_cpu=ppn)
         workflow_runner.run(mode='local', dataDirRoot=log_output_dp)
 
 

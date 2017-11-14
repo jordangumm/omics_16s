@@ -1,3 +1,4 @@
+import sys, os
 import click
 
 from subprocess import call
@@ -8,7 +9,7 @@ def generate_stability_file(read_dp):
     for fastq in os.listdir(read_dp):
         if '.fastq' not in fastq: continue
         sid = '_'.join([x for x in fastq.replace('-','_').split('_')][:-3])
-        fastq = os.path.join(self.read_dp, fastq)
+        fastq = os.path.join(read_dp, fastq)
 
         if sid not in fastqs.keys():
             if '_R1_' in fastq: fastqs[sid] = {'r1': fastq}
@@ -18,7 +19,7 @@ def generate_stability_file(read_dp):
             if '_R1_' in fastq: fastqs[sid]['r1'] = fastq
             elif '_R2_' in fastq: fastqs[sid]['r2'] = fastq
             else: sys.exit('Fastq file {} neither for or rev!'.format(fastq))
-    output = open(os.path.join(self.read_dp, 'stability.files'), 'w+')
+    output = open(os.path.join(read_dp, 'stability.files'), 'w+')
     for i, sid in enumerate(fastqs.keys()):
         if i != 0: output.write('\n')
         output.write('{}\t{}\t{}'.format(sid, fastqs[sid]['r1'], fastqs[sid]['r2']))
@@ -27,80 +28,64 @@ def generate_stability_file(read_dp):
 
 
 @click.command()
-@click.argument(read_dp)
-def run(read_dp):
+@click.argument('read_dp')
+@click.argument('dependencies_dp')
+@click.option('--num_cpu', '-n', default=2)
+def run(read_dp, dependencies_dp, num_cpu):
+    """
+    TODO: use built dependency silva files
+    TODO: save outputs to independent directory for easier use by downstream processes
+    """
+    if not os.path.exists(read_dp):
+        sys.exit('read_dp {} DOES NOT EXIST'.format(read_dp))
+    if not os.path.exists(dependencies_dp):
+        sys.exit('dependencies_dp {} DOES NOT EXIST'.format(dependencies_dp))
     generate_stability_file(read_dp)
+
+    if not os.path.exists(os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.pcr.align')):
+        cmd = ['''mothur "#pcr.seqs(fasta={}, start=11894, end=25319, keepdots=F);"'''.format(
+                             os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.align'))]
+        call(cmd, shell=True) 
 
     # make contigs
     cmd = ['''mothur "#set.dir(input={});
                        make.contigs(file='stability.files',
-                                    processors={});"'''.format(self.read_dp, self.num_cpu)]
-    call(cmd, shell=True)
-
-    cmd = ['''mothur "#set.dir(input={});
-                       screen.seqs(fasta='stability.trim.contigs.fasta',
-                                   group='stability.contigs.groups',
+                                    processors={});
+                       screen.seqs(fasta=current,
+                                   group=current,
                                    maxambig=0,
                                    maxlength=275,
                                    minlength=240,
-                                   maxhomop=8);"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    #m.unique.seqs(fasta='current')
-    cmd = ['''mothur "#set.dir(input={});
-                       unique.seqs(fasta='stability.trim.contigs.good.fasta');"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    #m.count.seqs(name='current', group='current')
-    #m.align.seqs(fasta='current', reference='silva.seed_v123.pcr.align')
-    #m.screen.seqs(fasta='current', count='current', start=1968, end=11550)
-    cmd = ['''mothur "#set.dir(input={});
-              count.seqs(name='stability.trim.contigs.good.names',
-                         group='stability.contigs.good.groups');
-              align.seqs(fasta='stability.trim.contigs.good.unique.fasta',
-                         reference='silva.seed_v123.pcr.align', flip=T);
-              screen.seqs(fasta=current,
-                          count=current,
-                          optimize=start-end,
-                          criteria=90);"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    #m.summary.seqs(fasta='current', count='current')
-    cmd = ['''mothur "#set.dir(input={});
-                       summary.seqs(fasta='stability.trim.contigs.good.unique.align');"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    cmd = ['''mothur "#set.dir(input={});
-                       filter.seqs(fasta='stability.trim.contigs.good.unique.good.align',
-                                   vertical=T, trump=.);"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    cmd = ['''mothur "#set.dir(input={});
-                       unique.seqs(fasta='stability.trim.contigs.good.unique.good.filter.fasta',
-                                   count='stability.trim.contigs.good.good.count_table');"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    cmd = ['''mothur "#set.dir(input={});
-                       pre.cluster(fasta='stability.trim.contigs.good.unique.good.filter.unique.fasta',
-                                   count='stability.trim.contigs.good.unique.good.filter.count_table',
-                                   diffs=2);"'''.format(self.read_dp)]
-    call(cmd, shell=True)
-
-    # search for chimeras and remove them
-    cmd = ['''mothur "#set.dir(input={});
-                       chimera.uchime(fasta='stability.trim.contigs.good.unique.good.filter.unique.precluster.fasta',
-                                      count='stability.trim.contigs.good.unique.good.filter.unique.precluster.count_table',
+                                   maxhomop=8);
+                       summary.seqs(count=current);
+                       unique.seqs(fasta=current);
+                       count.seqs(name=current,
+                                  group=current);
+                       align.seqs(fasta=current,
+                                  reference={});
+                       summary.seqs(count=current);
+                       screen.seqs(fasta=current,
+                                   count=current,
+                                   start=1968,
+                                   end=11550);
+                       summary.seqs(count=current);
+                       filter.seqs(fasta=current,
+                                   vertical=T,
+                                   trump=.);
+                       unique.seqs(fasta=current,
+                                   count=current);
+                       pre.cluster(fasta=current,
+                                   count=current,
+                                   diffs=2);
+                       chimera.uchime(fasta=current,
+                                      count=current,
                                       dereplicate=t);
                        remove.seqs(fasta=current, accnos=current);
-                       summary.seqs(count=current);"'''.format(self.read_dp)]
-    call(cmd, shell=True)
- 
-    # classify sequences with a bayesian classifier using the silva database
-    cmd = ['''mothur "#set.dir(input={});
-                       classify.seqs(fasta='stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.fasta',
-                          count='stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.uchime.pick.count_table',
-                                     reference='/nfs/vdenef-lab/Shared/Ruben/databases_taxass/silva.nr_v123.align',
-                                     taxonomy=/nfs/vdenef-lab/Shared/Ruben/databases_taxass/silva.nr_v123.tax,
+                       summary.seqs(count=current);
+                       classify.seqs(fasta=current,
+                                     count=current,
+                                     reference={},
+                                     taxonomy={},
                                      cutoff=60);
                        remove.lineage(fasta=current,
                                       count=current,
@@ -119,7 +104,10 @@ def run(read_dp):
                        classify.otu(list=current,
                                     count=current,
                                     taxonomy=current,
-                                    label=0.03);"'''.format(self.read_dp)]
+                                    label=0.03);"'''.format(read_dp, num_cpu,
+              os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.pcr.align'),
+              os.path.join(dependencies_dp, 'silva', 'silva.nr_v128.align'),
+              os.path.join(dependencies_dp, 'silva', 'silva.nr_v128.tax'))]
     call(cmd, shell=True)
     return None
 

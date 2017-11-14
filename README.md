@@ -5,10 +5,11 @@ Base workflow for setting up OTU analysis from Illumina fastq(s).  It follows th
   * [Accuracy of microbial community diversity estimated by closed- and open-reference OTUs 2017](https://peerj.com/articles/3889/)
 
 
-It leverages third party tools:
+It leverages third party tools and databases:
 
   * [MeFit 2016](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-016-1358-1): a merging and filtering tool for Illumina paired-end reads, designed specifically for 16S rRNA amplicaon sequencing data
   * [Mothur 2009](http://aem.asm.org/content/75/23/7537.full): software for describing and comparing microbial communities
+  * [Silva reference files v128 2016](https://mothur.org/wiki/Silva_reference_files): 16S rRNA seed database and  sequence/taxonomy references
 
 ## Setup
 1. To be able to build [CASPER](http://best.snu.ac.kr/casper/index.php?name=manual), you'll need to make sure the g++ compiler and boost libraries are installed
