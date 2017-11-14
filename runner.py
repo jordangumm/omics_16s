@@ -22,7 +22,7 @@ class Runner(WorkflowRunner):
     def workflow(self):
         """ method invoked on class instance run call """
         self.addTask("preanalysis", command=['python', self.preanalysis_fp, self.run_dp, self.analysis_dp])
-        self.addTask("analysis", command=['python', self.analysis_fp, self.analysis_dp], dependencies=['preanalysis',])
+        self.addTask("analysis", command=['python', '--num_cpu', num_cpu, 'self.analysis_fp, self.analysis_dp], dependencies=['preanalysis',])
 
 
 @click.command()
