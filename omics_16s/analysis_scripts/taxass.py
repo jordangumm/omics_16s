@@ -83,7 +83,22 @@ class TaxAss(WorkflowRunner):
 
         cmd = 'python $(echo "{}") {} {} {}'.format(self.create_fastas_fp, ids_below_all_fp, taxass_fasta, below_final_fp)
         self.addTask('create_below_final', command=cmd, dependencies=['cat_ids_below',])
-        
+
+        cmd= 'mothur "#classify.seqs(fasta={}, template={},  taxonomy={}, method=wang, probs=T, processors={}, cutoff=0)"'.format(above_final_fp, self.specific_fasta, self.specific_taxa, self.num_cpu)
+        self.addTask('assign_above_taxonomy', command=cmd, dependencies=['create_above_final',])
+
+        cmd= 'mothur "#classify.seqs(fasta={}, template={},  taxonomy={}, method=wang, probs=T, processors={}, cutoff=0)"'.format(below_final_fp, self.general_fasta, self.general_taxa, self.num_cpu)
+        self.addTask('assign_below_taxonomy', command=cmd, dependencies=['create_below_final',])
+
+        # created in assign_above_taxonomy
+        above_taxonomy_fp = os.path.join(self.output_dp, 'otus.above.97.FreshTrain18Aug2016.wang.taxonomy')
+        below_taxonomy_fp = os.path.join(self.output_dp, 'otus.below.97.nr_v128.wang.taxonomy')
+        combined_taxonomy_fp = os.path.join(self.output_dp, 'otus.97.taxonomy')
+        cmd = 'cat {} {} > {}'.format(above_taxonomy_fp, below_taxonomy_fp, combined_taxonomy_fp)
+        self.addTask('combine_taxonomy', command=cmd, dependencies=['assign_above_taxonomy', 'assign_below_taxonomy'])
+
+        cmd = 'mothur "#classify.seqs(fasta={}, template={}, taxonomy={}, method=wang, probs=T, processors={}, cutoff=0)"'.format(taxass_fasta, self.general_fasta, self.general_taxa, self.num_cpu)
+        self.addTask('create_general_taxonomy', command=cmd, dependencies=['make_taxass_fasta'])
 
         
 
