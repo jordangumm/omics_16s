@@ -41,7 +41,7 @@ def runner(run_dp, flux, account, ppn, mem, walltime):
     Arguments:
     run_dp -- String path to run directory to pre-analyze
     """
-    log_output_dp = os.path.join(run_dp, 'bioinfo', 'runner')
+    log_output_dp = os.path.join(run_dp, 'bioinfo', 'logs', 'runner')
 
     if flux:
         full_dp = os.path.dirname(os.path.abspath(__file__))

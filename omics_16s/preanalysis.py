@@ -44,15 +44,15 @@ class PreAnalyzer(WorkflowRunner):
     def workflow(self):
         """ method invoked on class instance run call """
         self.addTask("gunzip", command=self.get_gunzip_cmd())
-        mefit_taskids = []
-        for i, sid in enumerate(self.samples.keys()):
-            mefit_taskids.append("mefit_{}".format(i))
-            self.addTask("mefit_{}".format(i),
-                          command=['mefit', '-s', os.path.join('tmp', sid),
-                                            '-r1', self.samples[sid]['r1'],
-                                            '-r2', self.samples[sid]['r2'],
-                                            '-avgq', '20'],
-                          dependencies=['gunzip',])
+        #mefit_taskids = []
+        #for i, sid in enumerate(self.samples.keys()):
+        #    mefit_taskids.append("mefit_{}".format(i))
+        #    self.addTask("mefit_{}".format(i),
+        #                  command=['mefit', '-s', os.path.join('tmp', sid),
+        #                                    '-r1', self.samples[sid]['r1'],
+        #                                    '-r2', self.samples[sid]['r2'],
+        #                                    '-avgq', '20'],
+        #                  dependencies=['gunzip',])
         
 @click.command()
 @click.argument('run_dp')
@@ -66,11 +66,10 @@ def pre_analysis(run_dp, analysis_dp):
     Arguments:
     run_dp -- String path to run directory to pre-analyze
     """
-    #log_output_dp = os.path.join(run_dp, 'bioinfo', "preanalysis")
+    log_output_dp = os.path.join(run_dp, 'bioinfo', 'logs', 'preanalysis')
 
     preanalyzer = PreAnalyzer(run_dp=run_dp, analysis_dp=analysis_dp)
-    #preanalyzer.run(mode='local', dataDirRoot=log_output_dp)
-    #print 'post preanalyser'
+    preanalyzer.run(mode='local', dataDirRoot=log_output_dp)
 
     for i, fastq in enumerate(os.listdir(run_dp)):
         if '_R1_' not in fastq and '_R2_' not in fastq: continue
