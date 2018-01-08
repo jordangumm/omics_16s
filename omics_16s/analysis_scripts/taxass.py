@@ -129,7 +129,7 @@ def analysis(analysis_dp, taxass_dp, silva_dp, num_cpu):
                            taxass_dp=taxass_dp,
                            silva_dp=silva_dp,
                            num_cpu=num_cpu)
-    #taxasser.run(mode='local', dataDirRoot=log_output_dp)
+    taxasser.run(mode='local', dataDirRoot=log_output_dp)
 
       
     combined_taxonomy_fp = os.path.join(taxasser.output_dp, 'final.FWDB.Silva.taxonomy')
@@ -166,7 +166,9 @@ def analysis(analysis_dp, taxass_dp, silva_dp, num_cpu):
                                    method=abundance,
                                    fasta={},
                                    name={},
-                                   label=0.03);"'''.format(taxasser.output_dp,
+                                   label=0.03);
+                        tree.shared(shared=current,
+                             calc=jest-thetayc-braycurtis);"'''.format(taxasser.output_dp,
                                                          taxasser.fasta_fp,
                                                          taxasser.count_fp,
                                                          combined_taxonomy_fp,

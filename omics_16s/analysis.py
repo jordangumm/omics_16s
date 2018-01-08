@@ -17,6 +17,7 @@ class Analyzer(WorkflowRunner):
         self.mothur_dp = os.path.join(analysis_dp, 'mothur')
         if not os.path.exists(self.mothur_dp):
             os.makedirs(self.mothur_dp)
+        self.otu_fasta = os.path.join(analysis_dp, 'otus.fasta')
 
         self.reads_dp = os.path.join(analysis_dp, 'reads')
         if not os.path.exists(self.reads_dp):
@@ -27,6 +28,7 @@ class Analyzer(WorkflowRunner):
         full_dp = os.path.dirname(os.path.abspath(__file__))
         self.otu_generator_fp = os.path.join(full_dp, 'analysis_scripts', 'otu_generator.py')
         self.taxass_fp = os.path.join(full_dp, 'analysis_scripts', 'taxass.py')
+        self.fasttree_fp = os.path.join(full_dp, 'analysis_scripts', 'fasttree.py')
 
         self.dependencies_dp = full_dp.replace('omics_16s/omics_16s', 'omics_16s/dependencies')
 
@@ -39,11 +41,16 @@ class Analyzer(WorkflowRunner):
                                                          self.mothur_dp,
                                                          self.dependencies_dp])
         self.addTask("taxass_analysis", command=['python', self.taxass_fp,
-                                                           '--num_cpu', self.num_cpu,
+                                                           '--num_cpu', self.num_cpu-1, # to support fasttree concurrently
                                                            self.analysis_dp,
                                                            os.path.join(self.dependencies_dp, 'TaxAss'),
                                                            os.path.join(self.dependencies_dp, 'silva')],
                                                            dependencies=['otu_generator',])
+
+        self.addTask("fasttree", command=['python', self.fasttree_fp,
+                                                    self.otu_fasta,
+                                                    self.analysis_dp],
+                                 dependencies=['otu_generator',])
 
 
 @click.command()

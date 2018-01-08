@@ -29,7 +29,7 @@ class Runner(WorkflowRunner):
 @click.command()
 @click.argument('run_dp')
 @click.option('--flux/--no-flux', default=False)
-@click.option('--account', '-a', default='lsa_fluxm')
+@click.option('--account', '-a')
 @click.option('--ppn', '-p', default=8)
 @click.option('--mem', '-m', default='20gb')
 @click.option('--walltime', '-w', default='2:00:00')

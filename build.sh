@@ -23,7 +23,7 @@ source ./dependencies/miniconda/bin/activate
 # add bioconda and r channel for easy dependency installations
 conda config --add channels r
 conda config --add channels bioconda
-conda install -c bioconda mothur
+conda install -c bioconda mothur bioconductor-ggtree fasttree blast
 
 # install pyflow for automated task management
 wget https://github.com/Illumina/pyflow/releases/download/v1.1.17/pyflow-1.1.17.tar.gz
@@ -44,15 +44,15 @@ wget https://raw.githubusercontent.com/nisheth/MeFiT/master/mefit
 chmod 772 mefit
 mv mefit dependencies/miniconda/bin/
 
-git clone https://github.com/McMahonLab/TaxAss.git
-unzip TaxAss/FreshTrain-files/FreshTrain18Aug2016.zip
-mv TaxAss dependencies/
-mv FreshTrain18Aug2016 dependencies/TaxAss/
+#git clone https://github.com/McMahonLab/TaxAss.git
+#unzip TaxAss/FreshTrain-files/FreshTrain18Aug2016.zip
+#mv TaxAss dependencies/
+#mv FreshTrain18Aug2016 dependencies/TaxAss/
 
-mkdir -p dependencies/silva
-wget https://mothur.org/w/images/b/b4/Silva.nr_v128.tgz
-tar -zxvf Silva.nr_v128.tgz -C dependencies/silva/
+#mkdir -p dependencies/silva
+#wget https://mothur.org/w/images/b/b4/Silva.nr_v128.tgz
+#tar -zxvf Silva.nr_v128.tgz -C dependencies/silva/
 
-wget https://mothur.org/w/images/a/a4/Silva.seed_v128.tgz
-tar -zxvf Silva.seed_v128.tgz -C dependencies/silva/
-rm -r Silva*
+#wget https://mothur.org/w/images/a/a4/Silva.seed_v128.tgz
+#tar -zxvf Silva.seed_v128.tgz -C dependencies/silva/
+#rm -r Silva*

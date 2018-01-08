@@ -1,0 +1,33 @@
+#!/bin/bash
+####  PBS preamble
+#PBS -N fasttree
+#PBS -m abe
+#PBS -M gumm@umich.edu
+#PBS -j oe
+
+#PBS -A duhaimem_fluxm
+#PBS -q fluxm
+
+#PBS -l nodes=1:ppn=8,mem=200gb,walltime=4:00:00:00
+#PBS -V
+
+####  End PBS preamble
+
+if [ -s "$PBS_NODEFILE" ] ; then
+    echo "Running on"
+    uniq -c $PBS_NODEFILE
+fi
+
+if [ -d "$PBS_O_WORKDIR" ] ; then
+    cd $PBS_O_WORKDIR
+    echo "Running from $PBS_O_WORKDIR"
+fi
+
+# Run in src directory where preanalysis.py exists
+source /scratch/duhaimem_fluxm/gumm/results/class_taxonomy/omics_16s/dependencies/miniconda/bin/activate
+
+python 
+
+
+
+### End of PBS
