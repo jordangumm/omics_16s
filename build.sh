@@ -24,6 +24,7 @@ source ./dependencies/miniconda/bin/activate
 conda config --add channels r
 conda config --add channels bioconda
 conda install -c bioconda mothur bioconductor-ggtree fasttree blast
+conda install -c conda-forge readline
 
 # install pyflow for automated task management
 wget https://github.com/Illumina/pyflow/releases/download/v1.1.17/pyflow-1.1.17.tar.gz
