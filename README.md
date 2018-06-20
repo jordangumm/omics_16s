@@ -27,4 +27,4 @@ Use the runner script against a sequencing run directory of fastq(s)
 > $python runner.py <run_dp>
 
 You can also run on flux!
-> $python runner.py --flux <run_dp> --account <flux_account_name>
+> $python runner.py -q <queue> --flux <run_dp> --account <flux_account_name>
