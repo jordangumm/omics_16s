@@ -29,11 +29,12 @@ class Runner(WorkflowRunner):
 @click.command()
 @click.argument('run_dp')
 @click.option('--flux/--no-flux', default=False)
+@click.option('--queue', '-q', default='fluxod')
 @click.option('--account', '-a')
 @click.option('--ppn', '-p', default=8)
 @click.option('--mem', '-m', default='20gb')
 @click.option('--walltime', '-w', default='2:00:00')
-def runner(run_dp, flux, account, ppn, mem, walltime):
+def runner(run_dp, flux, queue, account, ppn, mem, walltime):
     """ Analysis Workflow Management
 
     Sets up Pyflow WorkflowRunner and launches locally by default or via flux
@@ -47,7 +48,12 @@ def runner(run_dp, flux, account, ppn, mem, walltime):
         full_dp = os.path.dirname(os.path.abspath(__file__))
         activate = 'source {}'.format(os.path.join(full_dp, 'dependencies', 'miniconda', 'bin', 'activate'))
         runner_fp = os.path.join(full_dp, 'runner.py')
-        qsub = 'qsub -N omics_16s -A {} -q fluxm -l nodes=1:ppn={},mem={},walltime={}'.format(account, ppn, mem, walltime)
+        if queue = 'fluxod':
+            qsub = 'qsub -N omics_16s -A {} -q {} -l nodes=1:ppn={}:largemem,mem={},walltime={}'.format(
+                                                             account, queue, ppn, mem, walltime)
+        else:
+            qsub = 'qsub -N omics_16s -A {} -q {} -l nodes=1:ppn={},mem={},walltime={}'.format(
+                                                             account, queue, ppn, mem, walltime)
         call('echo "{} && python {} {}" | {}'.format(activate, runner_fp, run_dp, qsub), shell=True)
     else:
         workflow_runner = Runner(run_dp=run_dp, num_cpu=ppn)
