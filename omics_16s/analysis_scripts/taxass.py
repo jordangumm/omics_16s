@@ -20,8 +20,6 @@ class TaxAss(WorkflowRunner):
              'stability.trim.contigs.good.unique.good.filter.unique.precluster.fasta')
         self.count_fp = os.path.join(analysis_dp, 'mothur',
              'stability.trim.contigs.good.unique.good.filter.unique.precluster.count_table')
-        #self.count_fp = os.path.join(analysis_dp, 'mothur',
-        #     'stability.trim.contigs.good.unique.good.filter.unique.precluster.denovo.vsearch.pick.pick.count_table')
         self.names_fp = os.path.join(analysis_dp, 'mothur',
              'stability.trim.contigs.good.names')
         if not os.path.exists(self.fasta_fp) or not os.path.exists(self.count_fp) or not os.path.exists(self.names_fp):
