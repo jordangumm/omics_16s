@@ -41,7 +41,7 @@ class Analyzer(WorkflowRunner):
                                                          self.mothur_dp,
                                                          self.dependencies_dp])
         self.addTask("taxass_analysis", command=['python', self.taxass_fp,
-                                                           '--num_cpu', self.num_cpu-1, # to support fasttree concurrently
+                                                           '--num_cpu', self.num_cpu,
                                                            self.analysis_dp,
                                                            os.path.join(self.dependencies_dp, 'TaxAss'),
                                                            os.path.join(self.dependencies_dp, 'silva')],
@@ -50,7 +50,7 @@ class Analyzer(WorkflowRunner):
         self.addTask("fasttree", command=['python', self.fasttree_fp,
                                                     self.otu_fasta,
                                                     self.analysis_dp],
-                                 dependencies=['otu_generator',])
+                                 dependencies=['otu_generator', 'taxass_analysis'])
 
 
 @click.command()
