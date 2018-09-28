@@ -125,12 +125,12 @@ def run(reads_dp, mothur_dp, dependencies_dp, num_cpu):
               os.path.join(dependencies_dp, 'silva', 'silva.nr_v132.align'),
               os.path.join(dependencies_dp, 'silva', 'silva.nr_v132.tax'))]
     call(cmd, shell=True)
-    db = screed.read_fasta_sequences(os.path.join(mothur_dp, 'stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.opti_mcc.unique_list.0.03.rep.fasta'))
-    output = open(os.path.join(mothur_dp, '../', 'otus.fasta'), 'w+')
-    for otu in db:
-        output.write('>{}\n'.format(otu.split('\t')[1].split('|')[0]))
-        output.write('{}\n'.format(db[otu].sequence))
-    output.close()
+    #db = screed.read_fasta_sequences(os.path.join(mothur_dp, 'stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.opti_mcc.unique_list.0.03.rep.fasta'))
+    #output = open(os.path.join(mothur_dp, '../', 'otus.fasta'), 'w+')
+    #for otu in db:
+    #    output.write('>{}\n'.format(otu.split('\t')[1].split('|')[0]))
+    #    output.write('{}\n'.format(db[otu].sequence))
+    #output.close()
     return None
 
 
