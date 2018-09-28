@@ -45,9 +45,9 @@ def run(reads_dp, mothur_dp, dependencies_dp, num_cpu):
         sys.exit('dependencies_dp {} DOES NOT EXIST'.format(dependencies_dp))
     generate_stability_file(reads_dp, mothur_dp)
 
-    if not os.path.exists(os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.pcr.align')):
+    if not os.path.exists(os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.pcr.align')):
         cmd = ['''mothur "#pcr.seqs(fasta={}, start=11894, end=25319, keepdots=F);"'''.format(
-                             os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.align'))]
+                             os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.align'))]
         call(cmd, shell=True) 
 
     miniconda_bin_dp = os.path.join(dependencies_dp, 'mothur', 'bin')
@@ -121,9 +121,9 @@ def run(reads_dp, mothur_dp, dependencies_dp, num_cpu):
                                   name=current,
                                   fasta=current,
                                   list=current);"'''.format(mothur_dp, miniconda_bin_dp, num_cpu,
-              os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.pcr.align'),
-              os.path.join(dependencies_dp, 'silva', 'silva.nr_v128.align'),
-              os.path.join(dependencies_dp, 'silva', 'silva.nr_v128.tax'))]
+              os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.pcr.align'),
+              os.path.join(dependencies_dp, 'silva', 'silva.nr_v132.align'),
+              os.path.join(dependencies_dp, 'silva', 'silva.nr_v132.tax'))]
     call(cmd, shell=True)
     db = screed.read_fasta_sequences(os.path.join(mothur_dp, 'stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.opti_mcc.unique_list.0.03.rep.fasta'))
     output = open(os.path.join(mothur_dp, '../', 'otus.fasta'), 'w+')

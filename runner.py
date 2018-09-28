@@ -31,7 +31,7 @@ class Runner(WorkflowRunner):
 @click.option('--flux/--no-flux', default=False)
 @click.option('--queue', '-q', default='fluxod')
 @click.option('--account', '-a')
-@click.option('--ppn', '-p', default=8)
+@click.option('--ppn', '-p', default=4)
 @click.option('--mem', '-m', default='20gb')
 @click.option('--walltime', '-w', default='2:00:00')
 def runner(run_dp, flux, queue, account, ppn, mem, walltime):
@@ -48,7 +48,7 @@ def runner(run_dp, flux, queue, account, ppn, mem, walltime):
         full_dp = os.path.dirname(os.path.abspath(__file__))
         activate = 'source {}'.format(os.path.join(full_dp, 'dependencies', 'miniconda', 'bin', 'activate'))
         runner_fp = os.path.join(full_dp, 'runner.py')
-        if queue = 'fluxod':
+        if queue == 'fluxod':
             qsub = 'qsub -N omics_16s -A {} -q {} -l nodes=1:ppn={}:largemem,mem={},walltime={}'.format(
                                                              account, queue, ppn, mem, walltime)
         else:

@@ -37,8 +37,8 @@ class TaxAss(WorkflowRunner):
         self.find_seqids_fp = os.path.join(taxass_dp, 'tax-scripts', 'find_seqIDs_blast_removed.py')
         self.create_fastas_fp = os.path.join(taxass_dp, 'tax-scripts', 'create_fastas_given_seqIDs.py')
 
-        self.general_fasta = os.path.join(silva_dp, 'silva.nr_v128.align')
-        self.general_taxa = os.path.join(silva_dp, 'silva.nr_v128.tax')
+        self.general_fasta = os.path.join(silva_dp, 'silva.nr_v132.align')
+        self.general_taxa = os.path.join(silva_dp, 'silva.nr_v132.tax')
         self.num_cpu=num_cpu
 
         self.taxass_fasta = os.path.join(self.output_dp, 'sequence.fasta')
@@ -99,7 +99,7 @@ class TaxAss(WorkflowRunner):
 
         # created in assign_above_taxonomy
         above_taxonomy_fp = os.path.join(self.output_dp, 'otus.above.97.FreshTrain18Aug2016.wang.taxonomy')
-        below_taxonomy_fp = os.path.join(self.output_dp, 'otus.below.97.nr_v128.wang.taxonomy')
+        below_taxonomy_fp = os.path.join(self.output_dp, 'otus.below.97.nr_v132.wang.taxonomy')
         combined_taxonomy_fp = os.path.join(self.output_dp, 'final.FWDB.Silva.taxonomy')
         cmd = 'cat {} {} > {}'.format(above_taxonomy_fp, below_taxonomy_fp, combined_taxonomy_fp)
         self.addTask('combine_taxonomy', command=cmd, dependencies=['assign_above_taxonomy', 'assign_below_taxonomy'])

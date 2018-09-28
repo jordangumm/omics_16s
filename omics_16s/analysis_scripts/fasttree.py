@@ -20,7 +20,7 @@ class FastTreeRunner(WorkflowRunner):
         #os.path.join(analysis_dp, 'mothur',
         #     'stability.trim.contigs.good.unique.good.filter.unique.precluster.fasta')
         if not os.path.exists(self.fasta_fp):
-            sys.exit('mothur files not available for taxass analysis')
+            sys.exit('mothur files not available for fasttree analysis')
 
 
     def workflow(self):
