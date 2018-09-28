@@ -63,7 +63,7 @@ mv FreshTrain18Aug2016 dependencies/TaxAss/
 
 # install vsearch
 wget https://github.com/torognes/vsearch/archive/v2.8.5.tar.gz
-tar zxvf vsearch-2.8.5.tar.gz
+tar zxvf v2.8.5.tar.gz
 cd vsearch-2.8.5
 ./autogen.sh
 ./configure --prefix=$HOME
