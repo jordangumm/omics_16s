@@ -19,11 +19,11 @@ To be able to build [CASPER](http://best.snu.ac.kr/casper/index.php?name=manual)
 > $ git clone https://github.com/jordangumm/omics_16s.git
 
 2. Build the local conda environment with dependencies
-> $./build
+> $ cd omics_16s
+> $./build.sh
 
 3. Activate the root environment
 > $source <path_to_project>/dependencies/miniconda/bin/activate
-
 
 ## Run Analysis
 Use the runner script against a sequencing run directory of fastq(s)
