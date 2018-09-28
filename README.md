@@ -13,7 +13,10 @@ It leverages third party tools and databases:
   * [TaxAss 2017](https://www.biorxiv.org/content/early/2017/11/05/214288): fine-scale taxonomic assignment for freshwater datasets (by default)
 
 ## Setup
-1. To be able to build [CASPER](http://best.snu.ac.kr/casper/index.php?name=manual), you'll need to make sure the g++ compiler and boost libraries are installed
+To be able to build [CASPER](http://best.snu.ac.kr/casper/index.php?name=manual), you'll need to make sure the g++ compiler and boost libraries are installed
+
+1. Clone the repository
+> $ git clone https://github.com/jordangumm/omics_16s.git
 
 2. Build the local conda environment with dependencies
 > $./build
