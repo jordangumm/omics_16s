@@ -45,10 +45,12 @@ def run(reads_dp, mothur_dp, dependencies_dp, num_cpu):
         sys.exit('dependencies_dp {} DOES NOT EXIST'.format(dependencies_dp))
     generate_stability_file(reads_dp, mothur_dp)
 
-    if not os.path.exists(os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.pcr.align')):
-        cmd = ['''mothur "#pcr.seqs(fasta={}, start=11894, end=25319, keepdots=F);"'''.format(
-                             os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.align'))]
+    if not os.path.exists(os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.pcr.align')):
+        cmd = ['''mothur "#pcr.seqs(fasta={}, start=11894, end=25319, keepdots=F, processors={});"'''.format(
+                             os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.align'), num_cpu)]
         call(cmd, shell=True) 
+    if not os.path.exists(os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.pcr.align')):
+        sys.exit('silva.seed_v132.pcr.align NOT CREATED.')
 
     miniconda_bin_dp = os.path.join(dependencies_dp, 'mothur', 'bin')
 
@@ -121,9 +123,9 @@ def run(reads_dp, mothur_dp, dependencies_dp, num_cpu):
                                   name=current,
                                   fasta=current,
                                   list=current);"'''.format(mothur_dp, miniconda_bin_dp, num_cpu,
-              os.path.join(dependencies_dp, 'silva', 'silva.seed_v128.pcr.align'),
-              os.path.join(dependencies_dp, 'silva', 'silva.nr_v128.align'),
-              os.path.join(dependencies_dp, 'silva', 'silva.nr_v128.tax'))]
+              os.path.join(dependencies_dp, 'silva', 'silva.seed_v132.pcr.align'),
+              os.path.join(dependencies_dp, 'silva', 'silva.nr_v132.align'),
+              os.path.join(dependencies_dp, 'silva', 'silva.nr_v132.tax'))]
     call(cmd, shell=True)
     #db = screed.read_fasta_sequences(os.path.join(mothur_dp, 'stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.opti_mcc.unique_list.0.03.rep.fasta'))
     db = screed.read_fasta_sequences(os.path.join(mothur_dp, 'stability.trim.contigs.good.unique.good.filter.unique.precluster.pick.pick.opti_mcc.0.03.rep.fasta'))

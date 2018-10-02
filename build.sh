@@ -26,6 +26,7 @@ conda config --add channels bioconda
 pip install screed
 conda install -c bioconda bioconductor-ggtree fasttree blast -y
 conda install -c conda-forge readline -y
+conda install -c r r-reshape
 
 # install pyflow for automated task management
 wget https://github.com/Illumina/pyflow/releases/download/v1.1.17/pyflow-1.1.17.tar.gz
@@ -69,3 +70,4 @@ cp mothur/vsearch dependencies/miniconda/bin/
 cp mothur/uchime dependencies/miniconda/bin/
 mv mothur dependencies/
 rm Mothur.linux_64.zip
+rm -r __MACOSX
