@@ -24,7 +24,7 @@ source ./dependencies/miniconda/bin/activate
 conda config --add channels r
 conda config --add channels bioconda
 pip install screed
-conda install -c bioconda mothur bioconductor-ggtree fasttree blast -y
+conda install -c bioconda bioconductor-ggtree fasttree blast -y
 conda install -c conda-forge readline -y
 
 # install pyflow for automated task management
@@ -61,15 +61,11 @@ unzip TaxAss/FreshTrain-files/FreshTrain18Aug2016.zip
 mv TaxAss dependencies/
 mv FreshTrain18Aug2016 dependencies/TaxAss/
 
-# install vsearch
-wget https://github.com/torognes/vsearch/archive/v2.8.5.tar.gz
-tar zxvf v2.8.5.tar.gz
-cd vsearch-2.8.5
-./autogen.sh
-./configure --prefix=$HOME
-make
-make install
-cp bin/vsearch ../dependencies/miniconda/bin/
-cd ..
-rm -r vsearch*
-rm v2.8.5.tar.gz
+# install Mothur and dependencies
+wget https://github.com/mothur/mothur/releases/download/v1.40.5/Mothur.linux_64.zip
+unzip Mothur.linux_64.zip
+cp mothur/mothur dependencies/miniconda/bin/
+cp mothur/vsearch dependencies/miniconda/bin/
+cp mothur/uchime dependencies/miniconda/bin/
+mv mothur dependencies/
+rm Mothur.linux_64.zip
